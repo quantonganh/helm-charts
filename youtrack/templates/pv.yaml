@@ -1,0 +1,51 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: youtrack-db-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /data/youtrack/db
+  storageClassName: standard
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: youtrack-conf-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Mi
+  hostPath:
+    path: /data/youtrack/conf
+  storageClassName: standard
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: youtrack-logs-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /data/youtrack/logs
+  storageClassName: standard
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: youtrack-backups-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /data/youtrack/backups
+  storageClassName: standard

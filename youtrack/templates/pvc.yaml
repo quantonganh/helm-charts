@@ -1,0 +1,47 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: youtrack-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: youtrack-db-pv
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: youtrack-conf-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Mi
+  volumeName: youtrack-conf-pv
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: youtrack-logs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  volumeName: youtrack-logs-pv
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: youtrack-backups-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: youtrack-backups-pv

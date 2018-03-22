@@ -1,0 +1,75 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "youtrack.fullname" . }}
+  labels:
+    app: {{ template "youtrack.name" . }}
+    chart: {{ template "youtrack.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "youtrack.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "youtrack.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - name: youtrack-db
+            mountPath: /opt/youtrack/data
+          - name: youtrack-conf
+            mountPath: /opt/youtrack/conf
+          - name: youtrack-logs
+            mountPath: /opt/youtrack/logs
+          - name: youtrack-backups
+            mountPath: /opt/youtrack/backups
+      volumes:
+      - name: youtrack-db
+        persistentVolumeClaim:
+          claimName: youtrack-db-pvc
+      - name: youtrack-conf
+        persistentVolumeClaim:
+          claimName: youtrack-conf-pvc
+      - name: youtrack-logs
+        persistentVolumeClaim:
+          claimName: youtrack-logs-pvc
+      - name: youtrack-backups
+        persistentVolumeClaim:
+          claimName: youtrack-backups-pvc
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
